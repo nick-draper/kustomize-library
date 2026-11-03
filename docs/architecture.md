@@ -240,11 +240,11 @@ Each overlay follows the same contract:
 resources:
   - ../../base
 components:
-  - https://github.com/nick-draper/kustomize-library.git//components/labels/environment/<env>?ref=<commit>
+  - https://github.com/nick-draper/kustomize-library.git//components/labels/environment/<env>?ref=<40-character-sha>
 patches:
   - path: environment.yaml
 transformers:
-  - https://github.com/nick-draper/kustomize-library.git//transformers/node-affinity?ref=<commit>
+  - https://github.com/nick-draper/kustomize-library.git//transformers/node-affinity?ref=<40-character-sha>
 ```
 
 | Overlay | Environment ConfigMap value | Label component | Namespace |
@@ -258,13 +258,19 @@ affinity or sync-wave policy.
 
 ### Remote consumption
 
-Pin every Git URL to the same commit or tag:
+Pin every Git URL to the same full 40-character commit SHA. Kustomize 5.8.1
+fetches that ref with `git fetch --depth=1`. A short SHA does not resolve.
+A branch name, including `main`, and a URL with no `ref` both follow the
+default branch, so they are not a pin. This repository does not publish a
+release tag. The transformer entry is the `transformers/node-affinity`
+directory. The `transformer.yaml` file URL is not a directory, and the build
+fails. The repository root does not run this transformer.
 
 ```yaml
 components:
-  - https://github.com/nick-draper/kustomize-library.git//components/node-affinity?ref=<commit>
+  - https://github.com/nick-draper/kustomize-library.git//components/node-affinity?ref=<40-character-sha>
 transformers:
-  - https://github.com/nick-draper/kustomize-library.git//transformers/node-affinity?ref=<commit>
+  - https://github.com/nick-draper/kustomize-library.git//transformers/node-affinity?ref=<40-character-sha>
 ```
 
 ## Rendered result

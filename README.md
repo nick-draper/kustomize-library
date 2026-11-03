@@ -20,7 +20,9 @@ Platform engineers who want one affinity and sync-wave policy, with the environm
 | `components/labels/argocd` | `app.kubernetes.io/managed-by: argocd` on the resource and the Pod template. Selectors stay unchanged |
 | `components/labels/environment/{dev,qa,prod}` | `my.cluster/environment` the same way |
 | `components/sync-waves` | `argocd.argoproj.io/sync-wave` on resource metadata |
-| `transformers/node-affinity` | Fills `ENV_PLACEHOLDER` from the overlay and `COMPUTE_PLACEHOLDER` from `sourceValue` |
+| `transformers/node-affinity` | Directory the overlay lists under `transformers`. Fills `ENV_PLACEHOLDER` from the overlay and `COMPUTE_PLACEHOLDER` from `sourceValue` |
+| `kustomization.yaml` | Base bundle of node affinity, the Argo CD label, and sync waves. Not a complete render |
+| `docs/architecture.md` | Build order, field paths, and the overlay contract |
 
 Set the profile on the workload, not on the Pod template:
 
@@ -30,20 +32,37 @@ metadata:
     scheduling.my.cluster/compute: gpu
 ```
 
-`cpu` and `gpu` are the only profiles. The `scheduling-settings` ConfigMap supplies `data.environment` and nothing else. It is marked `config.kubernetes.io/local-config: "true"`, so it is not rendered.
+`cpu` and `gpu` are the only profiles. The `scheduling-settings` ConfigMap supplies `data.environment` and nothing else. It is marked `config.kubernetes.io/local-config: "true"`, so it is not rendered. The tree has no credentials, tokens, or cluster endpoints.
 
 ## Pin it
 
-Use the same commit for every reference:
+Render with Kustomize 5.8.1. `kustomize version` must print `v5.8.1`. Argo CD v3.5.6 ships that renderer. No other Kustomize version is supported.
+
+The version is one full 40-character commit SHA, shared by every URL in the application. Kustomize 5.8.1 fetches it with `git fetch --depth=1`. That accepts the full SHA. It rejects a short SHA. `main`, any other branch, and a URL with no `ref` all follow the default branch, so none of them is a pin. This repository does not publish a release tag.
+
+The base selects the shared policy. The final overlay selects the environment, patches `scheduling-settings`, and runs the transformer. Point `transformers` at the `transformers/node-affinity` directory. A URL that ends in `transformer.yaml` fails because Kustomize 5.8.1 expects a directory.
+
+Base:
 
 ```yaml
 components:
-  - https://github.com/nick-draper/kustomize-library.git//components/node-affinity?ref=<commit>
-  - https://github.com/nick-draper/kustomize-library.git//components/labels/argocd?ref=<commit>
-  - https://github.com/nick-draper/kustomize-library.git//components/sync-waves?ref=<commit>
-transformers:
-  - https://github.com/nick-draper/kustomize-library.git//transformers/node-affinity?ref=<commit>
+  - https://github.com/nick-draper/kustomize-library.git//components/node-affinity?ref=<40-character-sha>
+  - https://github.com/nick-draper/kustomize-library.git//components/labels/argocd?ref=<40-character-sha>
+  - https://github.com/nick-draper/kustomize-library.git//components/sync-waves?ref=<40-character-sha>
 ```
+
+Overlay, using one of `dev`, `qa`, or `prod`:
+
+```yaml
+components:
+  - https://github.com/nick-draper/kustomize-library.git//components/labels/environment/qa?ref=<40-character-sha>
+patches:
+  - path: environment.yaml
+transformers:
+  - https://github.com/nick-draper/kustomize-library.git//transformers/node-affinity?ref=<40-character-sha>
+```
+
+`environment.yaml` sets `data.environment` on `scheduling-settings`. Without that patch the affinity value stays `ENVIRONMENT_UNSET`. The repository root is only the base bundle. Referencing it leaves `ENV_PLACEHOLDER` and `COMPUTE_PLACEHOLDER` in the output, because the root does not choose an environment and does not run the transformer.
 
 The build-order contract is in [docs/architecture.md](docs/architecture.md). Deploy and test the example with [kustomize-application](https://github.com/nick-draper/kustomize-application).
 
@@ -105,3 +124,7 @@ These values are the imported table, not a universal dependency order. Put an ex
 - Applying this library by itself. It has no workload until an application selects it
 - GPU device requests. Affinity only requires the node label `my.cluster/compute`
 - Kustomize versions other than 5.8.1
+
+## License
+
+Released under the [MIT License](LICENSE).
