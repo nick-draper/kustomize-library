@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: scheduling-settings
+  annotations:
+    config.kubernetes.io/local-config: "true"
+
+data:
+  environment: ENVIRONMENT_UNSET
+...

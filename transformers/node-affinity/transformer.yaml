@@ -1,0 +1,46 @@
+---
+apiVersion: builtin
+kind: ReplacementTransformer
+metadata:
+  name: node-affinity-values
+replacements:
+  # The overlay patches scheduling-settings data.environment. CPU and GPU
+  # strings are sourceValue literals; the workload label selects which one
+  # applies. Kustomize 5.8.1 matches the combined kind below.
+  - source:
+      kind: ConfigMap
+      name: scheduling-settings
+      fieldPath: data.environment
+    targets:
+      - select:
+          kind: Deployment|StatefulSet|Job
+        fieldPaths:
+          - spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms.*.matchExpressions.[key=^my\.cluster/environment$].values.[=^ENV_PLACEHOLDER$]
+      - select:
+          kind: CronJob
+        fieldPaths:
+          - spec.jobTemplate.spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms.*.matchExpressions.[key=^my\.cluster/environment$].values.[=^ENV_PLACEHOLDER$]
+  - sourceValue: cpu
+    targets:
+      - select:
+          kind: Deployment|StatefulSet|Job
+          labelSelector: scheduling.my.cluster/compute=cpu
+        fieldPaths:
+          - spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms.*.matchExpressions.[key=^my\.cluster/compute$].values.[=^COMPUTE_PLACEHOLDER$]
+      - select:
+          kind: CronJob
+          labelSelector: scheduling.my.cluster/compute=cpu
+        fieldPaths:
+          - spec.jobTemplate.spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms.*.matchExpressions.[key=^my\.cluster/compute$].values.[=^COMPUTE_PLACEHOLDER$]
+  - sourceValue: gpu
+    targets:
+      - select:
+          kind: Deployment|StatefulSet|Job
+          labelSelector: scheduling.my.cluster/compute=gpu
+        fieldPaths:
+          - spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms.*.matchExpressions.[key=^my\.cluster/compute$].values.[=^COMPUTE_PLACEHOLDER$]
+      - select:
+          kind: CronJob
+          labelSelector: scheduling.my.cluster/compute=gpu
+        fieldPaths:
+          - spec.jobTemplate.spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms.*.matchExpressions.[key=^my\.cluster/compute$].values.[=^COMPUTE_PLACEHOLDER$]

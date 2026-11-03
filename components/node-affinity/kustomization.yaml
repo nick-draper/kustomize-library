@@ -1,0 +1,96 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+
+resources:
+  - scheduling-settings.yaml
+
+# This component owns the required node-affinity terms.
+
+patches:
+  - target:
+      version: v1
+      kind: Deployment|StatefulSet|Job
+    patch: |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: placeholder
+      spec:
+        template:
+          spec:
+            affinity:
+              nodeAffinity:
+                requiredDuringSchedulingIgnoredDuringExecution:
+                  nodeSelectorTerms:
+                    - matchExpressions:
+                        - key: my.cluster/environment
+                          operator: In
+                          values:
+                            - ENV_PLACEHOLDER
+                        - key: my.cluster/compute
+                          operator: In
+                          values:
+                            - COMPUTE_PLACEHOLDER
+  - target:
+      group: batch
+      version: v1
+      kind: CronJob
+
+    patch: |-
+      apiVersion: batch/v1
+      kind: CronJob
+      metadata:
+        name: placeholder
+      spec:
+        jobTemplate:
+          spec:
+            template:
+              spec:
+                affinity:
+                  nodeAffinity:
+                    requiredDuringSchedulingIgnoredDuringExecution:
+                      nodeSelectorTerms:
+                        - matchExpressions:
+                            - key: my.cluster/environment
+                              operator: In
+                              values:
+                                - ENV_PLACEHOLDER
+                            - key: my.cluster/compute
+                              operator: In
+                              values:
+                                - COMPUTE_PLACEHOLDER
+  # Opt in database workloads that cannot run on AFM CPU nodes.
+  - target:
+      group: apps
+      version: v1
+      kind: StatefulSet
+
+      labelSelector: scheduling.my.cluster/avoid-afm=true
+    patch: |-
+      apiVersion: apps/v1
+      kind: StatefulSet
+      metadata:
+        name: placeholder
+      spec:
+        template:
+          spec:
+            affinity:
+              nodeAffinity:
+                requiredDuringSchedulingIgnoredDuringExecution:
+                  nodeSelectorTerms:
+                    - matchExpressions:
+                        - key: my.cluster/environment
+                          operator: In
+                          values:
+                            - ENV_PLACEHOLDER
+                        - key: my.cluster/compute
+                          operator: In
+                          values:
+                            - COMPUTE_PLACEHOLDER
+                        - key: scale.spectrum.ibm.com/role
+                          operator: NotIn
+                          values:
+                            - afm
+...

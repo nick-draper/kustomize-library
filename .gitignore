@@ -1,0 +1,11 @@
+.DS_Store
+
+# Local renderer binaries. Install Kustomize 5.8.1 on PATH instead.
+.bin/
+
+# Credentials and local kubeconfigs.
+**/*credentials*
+**/*secret*
+*.pem
+*.key
+kubeconfig

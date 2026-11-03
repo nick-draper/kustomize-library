@@ -1,0 +1,706 @@
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-minus-10
+
+annotations:
+  argocd.argoproj.io/sync-wave: "-10"
+
+fieldSpecs:
+  - kind: Namespace
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-minus-5
+
+annotations:
+  argocd.argoproj.io/sync-wave: "-5"
+
+fieldSpecs:
+  - kind: Project
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-1
+
+annotations:
+  argocd.argoproj.io/sync-wave: "1"
+
+fieldSpecs:
+  - kind: AppProject
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-4
+
+annotations:
+  argocd.argoproj.io/sync-wave: "4"
+
+fieldSpecs:
+  - kind: Application
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-5
+
+annotations:
+  argocd.argoproj.io/sync-wave: "5"
+
+fieldSpecs:
+  - kind: ApplicationSet
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-6
+
+annotations:
+  argocd.argoproj.io/sync-wave: "6"
+
+fieldSpecs:
+  - kind: CatalogSource
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-7
+
+annotations:
+  argocd.argoproj.io/sync-wave: "7"
+
+fieldSpecs:
+  - kind: OperatorGroup
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-8
+
+annotations:
+  argocd.argoproj.io/sync-wave: "8"
+
+fieldSpecs:
+  - kind: Subscription
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-9
+
+annotations:
+  argocd.argoproj.io/sync-wave: "9"
+
+fieldSpecs:
+  - kind: ClusterServiceVersion
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-15
+
+annotations:
+  argocd.argoproj.io/sync-wave: "15"
+
+fieldSpecs:
+  - kind: CustomResourceDefinition
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-20
+
+annotations:
+  argocd.argoproj.io/sync-wave: "20"
+
+fieldSpecs:
+  - kind: StorageClass
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-22
+
+annotations:
+  argocd.argoproj.io/sync-wave: "22"
+
+fieldSpecs:
+  - kind: PersistentVolumeClaim
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-25
+
+annotations:
+  argocd.argoproj.io/sync-wave: "25"
+
+fieldSpecs:
+  - kind: NetworkPolicy
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-26
+
+annotations:
+  argocd.argoproj.io/sync-wave: "26"
+
+fieldSpecs:
+  - kind: MutatingWebhookConfiguration
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-28
+
+annotations:
+  argocd.argoproj.io/sync-wave: "28"
+
+fieldSpecs:
+  - kind: ResourceQuota
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-30
+
+annotations:
+  argocd.argoproj.io/sync-wave: "30"
+
+fieldSpecs:
+  - kind: LimitRange
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-31
+
+annotations:
+  argocd.argoproj.io/sync-wave: "31"
+
+fieldSpecs:
+  - kind: User
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-32
+
+annotations:
+  argocd.argoproj.io/sync-wave: "32"
+
+fieldSpecs:
+  - kind: Group
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-33
+
+annotations:
+  argocd.argoproj.io/sync-wave: "33"
+
+fieldSpecs:
+  - kind: Role
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-34
+
+annotations:
+  argocd.argoproj.io/sync-wave: "34"
+
+fieldSpecs:
+  - kind: RoleBinding
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-35
+
+annotations:
+  argocd.argoproj.io/sync-wave: "35"
+
+fieldSpecs:
+  - kind: ClusterRole
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-36
+
+annotations:
+  argocd.argoproj.io/sync-wave: "36"
+
+fieldSpecs:
+  - kind: ClusterRoleBinding
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-37
+
+annotations:
+  argocd.argoproj.io/sync-wave: "37"
+
+fieldSpecs:
+  - kind: ServiceAccount
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-42
+
+annotations:
+  argocd.argoproj.io/sync-wave: "42"
+
+fieldSpecs:
+  - kind: ConfigMap
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-44
+
+annotations:
+  argocd.argoproj.io/sync-wave: "44"
+
+fieldSpecs:
+  - kind: Secret
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-50
+
+annotations:
+  argocd.argoproj.io/sync-wave: "50"
+
+fieldSpecs:
+  - kind: Service
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-52
+
+annotations:
+  argocd.argoproj.io/sync-wave: "52"
+
+fieldSpecs:
+  - kind: Route
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-56
+
+annotations:
+  argocd.argoproj.io/sync-wave: "56"
+
+fieldSpecs:
+  - kind: EventListener
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-57
+
+annotations:
+  argocd.argoproj.io/sync-wave: "57"
+
+fieldSpecs:
+  - kind: TriggerBinding
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-58
+
+annotations:
+  argocd.argoproj.io/sync-wave: "58"
+
+fieldSpecs:
+  - kind: TriggerTemplate
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-59
+
+annotations:
+  argocd.argoproj.io/sync-wave: "59"
+
+fieldSpecs:
+  - kind: Task
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-60
+
+annotations:
+  argocd.argoproj.io/sync-wave: "60"
+
+fieldSpecs:
+  - kind: Pipeline
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-62
+
+annotations:
+  argocd.argoproj.io/sync-wave: "62"
+
+fieldSpecs:
+  - kind: Operand
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-70
+
+annotations:
+  argocd.argoproj.io/sync-wave: "70"
+
+fieldSpecs:
+  - kind: Deployment
+    path: metadata/annotations
+    create: true
+  - kind: StatefulSet
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-74
+
+annotations:
+  argocd.argoproj.io/sync-wave: "74"
+
+fieldSpecs:
+  - kind: DaemonSet
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-76
+
+annotations:
+  argocd.argoproj.io/sync-wave: "76"
+
+fieldSpecs:
+  - kind: Job
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-78
+
+annotations:
+  argocd.argoproj.io/sync-wave: "78"
+
+fieldSpecs:
+  - kind: CronJob
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-80
+
+annotations:
+  argocd.argoproj.io/sync-wave: "80"
+
+fieldSpecs:
+  - kind: HorizontalPodAutoscaler
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-82
+
+annotations:
+  argocd.argoproj.io/sync-wave: "82"
+
+fieldSpecs:
+  - kind: PodDisruptionBudget
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-84
+
+annotations:
+  argocd.argoproj.io/sync-wave: "84"
+
+fieldSpecs:
+  - kind: Prometheus
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-86
+
+annotations:
+  argocd.argoproj.io/sync-wave: "86"
+
+fieldSpecs:
+  - kind: ServiceMonitor
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-88
+
+annotations:
+  argocd.argoproj.io/sync-wave: "88"
+
+fieldSpecs:
+  - kind: Alertmanager
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-90
+
+annotations:
+  argocd.argoproj.io/sync-wave: "90"
+
+fieldSpecs:
+  - kind: Backup
+    path: metadata/annotations
+    create: true
+...
+
+---
+apiVersion: builtin
+kind: AnnotationsTransformer
+
+metadata:
+  name: sync-wave-92
+
+annotations:
+  argocd.argoproj.io/sync-wave: "92"
+
+fieldSpecs:
+  - kind: Schedule
+    path: metadata/annotations
+    create: true
+...
