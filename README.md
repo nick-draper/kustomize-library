@@ -1,7 +1,6 @@
-[![Kustomize 5.7.0](https://img.shields.io/badge/Kustomize-5.7.0-326ce5?logo=kubernetes&logoColor=white)](https://github.com/kubernetes-sigs/kustomize/releases/tag/kustomize%2Fv5.7.0)
-[![Kustomize 5.8.1](https://img.shields.io/badge/Kustomize-5.8.1-326ce5?logo=kubernetes&logoColor=white)](https://github.com/kubernetes-sigs/kustomize/releases/tag/kustomize%2Fv5.8.1)
-[![Scope](https://img.shields.io/badge/scope-library-0e6027)](docs/architecture.md)
-[![Last commit](https://img.shields.io/github/last-commit/nick-draper/kustomize-library)](https://github.com/nick-draper/kustomize-library/commits/main)
+[![Kustomize 5.7.0](badges/kustomize-5.7.0.svg)](https://github.com/kubernetes-sigs/kustomize/releases/tag/kustomize%2Fv5.7.0)
+[![Kustomize 5.8.1](badges/kustomize-5.8.1.svg)](https://github.com/kubernetes-sigs/kustomize/releases/tag/kustomize%2Fv5.8.1)
+[![Scope](badges/scope-library.svg)](docs/architecture.md)
 
 # Kustomize library
 
@@ -24,6 +23,7 @@ Platform engineers who want one affinity and sync-wave policy, with the environm
 | `transformers/node-affinity` | Directory the overlay lists under `transformers`. Fills `ENV_PLACEHOLDER` from the overlay and `COMPUTE_PLACEHOLDER` from `sourceValue` |
 | `kustomization.yaml` | Base bundle of node affinity, the Argo CD label, and sync waves. Not a complete render |
 | `docs/architecture.md` | Build order, field paths, and the overlay contract |
+| `badges/` | Static shield SVGs for this README. Copy the directory into another repo |
 
 Set the profile on the workload, not on the Pod template:
 
