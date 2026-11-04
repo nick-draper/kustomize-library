@@ -6,14 +6,24 @@ metadata:
 replacements:
   # The overlay patches scheduling-settings data.environment. CPU and GPU
   # strings are sourceValue literals; the workload label selects which one
-  # applies. Kustomize 5.8.1 matches the combined kind below.
+  # applies. Each kind is its own select. Kustomize 5.7.0 matches kind
+  # exactly, so a combined Deployment|StatefulSet|Job select matches nothing
+  # and leaves the placeholders. Kustomize 5.8.1 matches these exact kinds.
   - source:
       kind: ConfigMap
       name: scheduling-settings
       fieldPath: data.environment
     targets:
       - select:
-          kind: Deployment|StatefulSet|Job
+          kind: Deployment
+        fieldPaths:
+          - spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms.*.matchExpressions.[key=^my\.cluster/environment$].values.[=^ENV_PLACEHOLDER$]
+      - select:
+          kind: StatefulSet
+        fieldPaths:
+          - spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms.*.matchExpressions.[key=^my\.cluster/environment$].values.[=^ENV_PLACEHOLDER$]
+      - select:
+          kind: Job
         fieldPaths:
           - spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms.*.matchExpressions.[key=^my\.cluster/environment$].values.[=^ENV_PLACEHOLDER$]
       - select:
@@ -23,7 +33,17 @@ replacements:
   - sourceValue: cpu
     targets:
       - select:
-          kind: Deployment|StatefulSet|Job
+          kind: Deployment
+          labelSelector: scheduling.my.cluster/compute=cpu
+        fieldPaths:
+          - spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms.*.matchExpressions.[key=^my\.cluster/compute$].values.[=^COMPUTE_PLACEHOLDER$]
+      - select:
+          kind: StatefulSet
+          labelSelector: scheduling.my.cluster/compute=cpu
+        fieldPaths:
+          - spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms.*.matchExpressions.[key=^my\.cluster/compute$].values.[=^COMPUTE_PLACEHOLDER$]
+      - select:
+          kind: Job
           labelSelector: scheduling.my.cluster/compute=cpu
         fieldPaths:
           - spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms.*.matchExpressions.[key=^my\.cluster/compute$].values.[=^COMPUTE_PLACEHOLDER$]
@@ -35,7 +55,17 @@ replacements:
   - sourceValue: gpu
     targets:
       - select:
-          kind: Deployment|StatefulSet|Job
+          kind: Deployment
+          labelSelector: scheduling.my.cluster/compute=gpu
+        fieldPaths:
+          - spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms.*.matchExpressions.[key=^my\.cluster/compute$].values.[=^COMPUTE_PLACEHOLDER$]
+      - select:
+          kind: StatefulSet
+          labelSelector: scheduling.my.cluster/compute=gpu
+        fieldPaths:
+          - spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms.*.matchExpressions.[key=^my\.cluster/compute$].values.[=^COMPUTE_PLACEHOLDER$]
+      - select:
+          kind: Job
           labelSelector: scheduling.my.cluster/compute=gpu
         fieldPaths:
           - spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms.*.matchExpressions.[key=^my\.cluster/compute$].values.[=^COMPUTE_PLACEHOLDER$]

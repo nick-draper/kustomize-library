@@ -1,6 +1,6 @@
 # Standards model architecture
 
-This repository implements a reusable Kubernetes policy model with Kustomize 5.8.1.
+This repository implements a reusable Kubernetes policy model with Kustomize 5.7.0 and 5.8.1.
 It is not a machine-learning model: the model is the composition of workload
 classification, shared Kustomize components, a late replacement transformer, and
 environment-specific application overlays. The rendered YAML is the interface
@@ -199,8 +199,7 @@ patch. The published example does not include a separate override fixture.
 ### Stage 3: late replacement transformer
 
 `transformers/node-affinity/transformer.yaml` is a Kustomize
-`ReplacementTransformer` with three replacement rules. This is the Kustomize
-5.8.1 form:
+`ReplacementTransformer` with three replacement rules:
 
 1. Read `data.environment` from the `scheduling-settings` ConfigMap and replace
    `ENV_PLACEHOLDER` for every supported workload.
@@ -209,18 +208,22 @@ patch. The published example does not include a separate override fixture.
 3. Select workloads labeled `scheduling.my.cluster/compute=gpu` and replace
    `COMPUTE_PLACEHOLDER` with `sourceValue: gpu`.
 
-Deployment, StatefulSet, and Job are one target:
+Deployment, StatefulSet, and Job are separate targets on each rule:
 
 ```yaml
 select:
-  kind: Deployment|StatefulSet|Job
+  kind: Deployment
 ```
 
-CronJob is a second target on each rule because its field path is
-`spec.jobTemplate.spec.template.spec...`. That split is the PodSpec shape, not
-a compatibility workaround. Kustomize 5.8.1 anchors a combined kind as
-`^(?:Deployment|StatefulSet|Job)$`, so the combined target does not also match
-CronJob.
+Kustomize 5.7.0 matches a replacement `kind` exactly. The string
+`Deployment|StatefulSet|Job` selects nothing on 5.7.0, so both placeholders
+stay on those workloads. Listing each kind selects them on 5.7.0 and on 5.8.1.
+The component patch still uses the combined kind. Patch selectors already
+accept that form on 5.7.0, which is why the placeholders are present before
+replacement runs.
+
+CronJob is its own target because its field path is
+`spec.jobTemplate.spec.template.spec...`. That split is the PodSpec shape.
 
 The target field paths match only the expression whose key is
 `my.cluster/environment` or `my.cluster/compute`, and whose value is still the
@@ -258,8 +261,8 @@ affinity or sync-wave policy.
 
 ### Remote consumption
 
-Pin every Git URL to the same full 40-character commit SHA. Kustomize 5.8.1
-fetches that ref with `git fetch --depth=1`. A short SHA does not resolve.
+Pin every Git URL to the same full 40-character commit SHA. Kustomize 5.7.0
+and 5.8.1 fetch that ref with `git fetch --depth=1`. A short SHA does not resolve.
 A branch name, including `main`, and a URL with no `ref` both follow the
 default branch, so they are not a pin. This repository does not publish a
 release tag. The transformer entry is the `transformers/node-affinity`
@@ -318,9 +321,9 @@ sync. Kubernetes reads the required affinity terms when scheduling the Pod.
 3. Keep environment values in the overlay's `scheduling-settings` patch.
 4. Keep CPU and GPU strings as `sourceValue`. Do not add `data.cpu` or `data.gpu`
    to the ConfigMap, and do not point a replacement `fieldPath` at those keys.
-5. Keep Deployment, StatefulSet, and Job on `kind: Deployment|StatefulSet|Job`.
-   Split them only if Kustomize 5.8.1 itself leaves the placeholders, and record
-   that as a 5.8.1 bug.
+5. Keep the component patch on `kind: Deployment|StatefulSet|Job`. List
+   Deployment, StatefulSet, and Job as separate replacement targets so
+   Kustomize 5.7.0 selects them.
 6. Add shared required affinity expressions to the node-affinity component.
 7. Add new sync-wave defaults to `components/sync-waves/defaults.yaml` only when
    the policy is genuinely global.
@@ -343,14 +346,17 @@ deploys the three overlays to Minikube through Argo CD and checks them with
 Run those from a checkout of
 [kustomize-application](https://github.com/nick-draper/kustomize-application).
 `verify.sh` requires the Argo CD repo server to report Kustomize `v5.8.1`.
+A local `kustomize build` of this library also passes on `v5.7.0`.
 
 Common failures:
 
 - **`PLACEHOLDER` or `ENVIRONMENT_UNSET` remains:** the transformer was not
   included in the final overlay, the ConfigMap name changed, or a workload has
   an unsupported or missing compute label.
-- **Kustomize inside Argo CD is not v5.8.1:** install Argo CD v3.5.6, which
-  ships that renderer. Do not point the Application at a 5.6 binary.
+- **Placeholders remain on Deployment, StatefulSet, or Job:** the renderer is
+  older than 5.7.0, or the replacement targets were folded back into
+  `kind: Deployment|StatefulSet|Job`. Kustomize 5.7.0 matches that string
+  exactly and selects nothing. Argo CD v3.5.6 ships Kustomize 5.8.1.
 - **Environment is wrong:** the overlay selected the wrong environment component
   or patched `scheduling-settings` with the wrong value.
 - **A CronJob is not updated:** its `spec.jobTemplate.spec.template.spec` path
