@@ -1,4 +1,5 @@
-[![Kustomize](https://img.shields.io/badge/Kustomize-5.8.1-326ce5?logo=kubernetes&logoColor=white)](https://github.com/kubernetes-sigs/kustomize/releases/tag/kustomize%2Fv5.8.1)
+[![Kustomize 5.7.0](https://img.shields.io/badge/Kustomize-5.7.0-326ce5?logo=kubernetes&logoColor=white)](https://github.com/kubernetes-sigs/kustomize/releases/tag/kustomize%2Fv5.7.0)
+[![Kustomize 5.8.1](https://img.shields.io/badge/Kustomize-5.8.1-326ce5?logo=kubernetes&logoColor=white)](https://github.com/kubernetes-sigs/kustomize/releases/tag/kustomize%2Fv5.8.1)
 [![Scope](https://img.shields.io/badge/scope-library-0e6027)](docs/architecture.md)
 [![Last commit](https://img.shields.io/github/last-commit/nick-draper/kustomize-library)](https://github.com/nick-draper/kustomize-library/commits/main)
 
@@ -6,7 +7,7 @@
 
 Components for required node affinity, Argo CD labels, and sync-wave annotations. This repository is the library only. The example workloads, Minikube steps, and `kubectl` checks are in [kustomize-application](https://github.com/nick-draper/kustomize-application).
 
-The renderer is **Kustomize 5.8.1**. CPU and GPU replacement strings are `sourceValue` literals. Deployment, StatefulSet, and Job share `kind: Deployment|StatefulSet|Job`. CronJob stays separate because its PodSpec path is `spec.jobTemplate.spec.template.spec`.
+The renderers are **Kustomize 5.7.0** and **Kustomize 5.8.1**. CPU and GPU replacement strings are `sourceValue` literals. The node-affinity component patch targets Deployment, StatefulSet, and Job together with `kind: Deployment|StatefulSet|Job`. The replacement transformer lists those three kinds separately, because 5.7.0 matches a replacement kind exactly and leaves `ENV_PLACEHOLDER` and `COMPUTE_PLACEHOLDER` when the kind contains a pipe. CronJob stays separate because its PodSpec path is `spec.jobTemplate.spec.template.spec`.
 
 ## Who this is for
 
@@ -36,11 +37,11 @@ metadata:
 
 ## Pin it
 
-Render with Kustomize 5.8.1. `kustomize version` must print `v5.8.1`. Argo CD v3.5.6 ships that renderer. No other Kustomize version is supported.
+Render with Kustomize 5.7.0 or 5.8.1. `kustomize version` must print `v5.7.0` or `v5.8.1`. Argo CD v3.5.6 ships 5.8.1.
 
-The version is one full 40-character commit SHA, shared by every URL in the application. Kustomize 5.8.1 fetches it with `git fetch --depth=1`. That accepts the full SHA. It rejects a short SHA. `main`, any other branch, and a URL with no `ref` all follow the default branch, so none of them is a pin. This repository does not publish a release tag.
+The version is one full 40-character commit SHA, shared by every URL in the application. Kustomize 5.7.0 and 5.8.1 fetch it with `git fetch --depth=1`. That accepts the full SHA. It rejects a short SHA. `main`, any other branch, and a URL with no `ref` all follow the default branch, so none of them is a pin. This repository does not publish a release tag.
 
-The base selects the shared policy. The final overlay selects the environment, patches `scheduling-settings`, and runs the transformer. Point `transformers` at the `transformers/node-affinity` directory. A URL that ends in `transformer.yaml` fails because Kustomize 5.8.1 expects a directory.
+The base selects the shared policy. The final overlay selects the environment, patches `scheduling-settings`, and runs the transformer. Point `transformers` at the `transformers/node-affinity` directory. A URL that ends in `transformer.yaml` fails because the entry has to be a directory.
 
 Base:
 
@@ -123,7 +124,7 @@ These values are the imported table, not a universal dependency order. Put an ex
 - Example workloads and overlays. Those are [kustomize-application](https://github.com/nick-draper/kustomize-application)
 - Applying this library by itself. It has no workload until an application selects it
 - GPU device requests. Affinity only requires the node label `my.cluster/compute`
-- Kustomize versions other than 5.8.1
+- Kustomize versions other than 5.7.0 and 5.8.1
 
 ## License
 
